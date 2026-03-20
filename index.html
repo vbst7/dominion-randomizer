@@ -1065,7 +1065,9 @@
                     parts.push(l.name);
                 }
             } else {
-                parts.push(l.name);
+                if (l.name !== 'Approaching Army'){ //AA already accounted for
+                    parts.push(l.name);
+                }
             }
         });
 
