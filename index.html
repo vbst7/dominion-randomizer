@@ -109,6 +109,82 @@
       ]);
     };
 
+    // Logic to determine required components based on active cards and landscapes
+    const getRequiredComponents = (kingdom, landscapes, others = []) => {
+      const allActive = [...kingdom, ...landscapes, ...others].filter(Boolean);
+      const components = new Set();
+
+      // Helper to check properties via direct lookup or specific lists
+      const checkProperty = (item, prop) => {
+        if (item[prop]) return true;
+        const name = item.name;
+        if (prop === 'hasCoffers') return ['Baker', 'Butcher', 'Candlestick Maker', 'Merchant Guild', 'Plaza', 'Patron', 'Silk Merchant', 'Spices', 'Swashbuckler', 'Villain', 'Guildhall', 'Exploration', 'Pageant'].includes(name);
+        if (prop === 'hasVillagers') return ['Acting Troupe', 'Lackeys', 'Patron', 'Recruiter', 'Sculptor', 'Silk Merchant', 'Academy', 'Exploration'].includes(name);
+        if (prop === 'hasVP') return ['Bishop', 'Monument', 'Goons', 'Encampment', 'Patrician', 'Sacrifice', 'Temple', 'Wild Hunt', 'Triumph', 'Wedding', 'Aqueduct', 'Arena', 'Basilica', 'Baths', 'Battlefield', 'Colonnade', 'Defiled Shrine', 'Labyrinth', 'Tomb', 'Collection', 'Investment'].includes(name);
+        if (prop === 'hasHorses') return ['Cavalry', 'Demand', 'Groom', 'Hostelry', 'Livery', 'Paddock', 'Ride', 'Scrap', 'Sleigh', 'Stampede', 'Supplies'].includes(name);
+        if (prop === 'hasLoot') return ['Jewelled Egg', 'Search', 'Cutthroat', 'Pickaxe', 'Wealthy Village', 'Sack of Loot', 'Cursed', 'Peril', 'Looting', 'Invasion', 'Prosper'].includes(name);
+        if (prop === 'isFate') return ['Bard', 'Blessed Village', 'Druid', 'Fool', 'Idol', 'Sacred Grove', 'Tracker'].includes(name);
+        if (prop === 'isDoom') return ['Cursed Village','Leprechaun', 'Skulk', 'Tormentor', 'Vampire', 'Werewolf'].includes(name);
+        if (prop === 'hasCoinTokens') return ['Trade Route', 'Sinister Plot', 'Pirate Ship', 'Forts'].includes(name);
+        if (prop === 'hasDebt') return ['Capital', 'Change', 'Craftsman', 'Credit', 'Gold Mine', 'Harsh Winter', 'Imperial Envoy', 'Litter', 'Mountain Pass', 'Root Cellar', 'Tax'].includes(name);
+        if (prop === 'hasJourneyToken') return ['Ranger', 'Giant', 'Pilgrimage'].includes(name);
+        if (prop === 'hasEstateToken') return ['Inheritance'].includes(name);
+        if (prop === 'hasMinusOneCoinToken') return ['Bridge Troll', 'Ball'].includes(name);
+        if (prop === 'hasMinusOneCardToken') return ['Relic', 'Borrow', 'Raid'].includes(name);
+        if (prop === 'hasMinusTwoCostToken') return ['Ferry'].includes(name);
+        if (prop === 'hasTrashingToken') return ['Plan'].includes(name);
+        if (prop === 'hasPlusOneActionToken') return ['Peasant', 'Lost Arts'].includes(name);
+        if (prop === 'hasPlusOneBuyToken') return ['Peasant', 'Seaway'].includes(name);
+        if (prop === 'hasPlusOneCardToken') return ['Peasant', 'Pathfinding'].includes(name);
+        if (prop === 'hasPlusOneCoinToken') return ['Peasant', 'Training'].includes(name);
+        if (prop === 'hasExile') return ['Banish', 'Bounty Hunter', 'Sanctuary', 'Stockpile', 'Cardinal', 'Coven', 'Gatekeeper', 'Camel Train', 'Displace', 'Enclave', 'Invest', 'Transport', 'Way of the Camel', 'Way of the Worm'].includes(name);
+        return false;
+      };
+
+      allActive.forEach(card => {
+        const name = card.name;
+        const hasCoffers = checkProperty(card, 'hasCoffers');
+        const hasVillagers = checkProperty(card, 'hasVillagers');
+        const isLiaison = card.isLiaison;
+        const isFate = checkProperty(card, 'isFate');
+
+        if (card.costDebt > 0 || checkProperty(card, 'hasDebt')) components.add("Debt tokens");
+        if (hasCoffers) components.add("Coffers mat");
+        if (hasVillagers) components.add("Villager mat");
+        if (isLiaison) components.add("Favors mat");
+        if (card.isOmen) components.add("Sun tokens");
+        if (hasCoffers || hasVillagers || isLiaison || checkProperty(card, 'hasCoinTokens')) components.add("Coin tokens");
+        if (checkProperty(card, 'hasVP')) components.add("VP tokens");
+        if (checkProperty(card, 'hasHorses')) components.add("Horses");
+        if (checkProperty(card, 'hasLoot')) components.add("Loot");
+        if (card.costPotion > 0) components.add("Potion");
+        if (isFate) components.add("Boons");
+        if (checkProperty(card, 'isDoom')) components.add("Hexes");
+        if (isFate || name === 'Exorcist') components.add("Will-o-Wisp");
+        if (name === 'Exorcist' || name === 'Tormentor') components.add("Imp");
+        if (name === 'Cemetery' || name === 'Exorcist') components.add("Ghost");
+        if (name === 'Leprechaun' || name === 'Secret Cave') components.add("Wishes");
+        if (name === 'Cultist' || name === 'Marauder' || name === 'Death Cart') components.add("Ruins");
+        if (name === 'Marauder' || name === 'Bandit Camp' || name === 'Pillage') components.add("Spoils");
+        if (checkProperty(card, 'hasJourneyToken')) components.add("Journey token");
+        if (checkProperty(card, 'hasEstateToken')) components.add("Estate token");
+        if (checkProperty(card, 'hasMinusOneCoinToken')) components.add("–$1 token");
+        if (checkProperty(card, 'hasMinusOneCardToken')) components.add("–1 Card token");
+        if (checkProperty(card, 'hasMinusTwoCostToken')) components.add("–$2 cost token");
+        if (checkProperty(card, 'hasTrashingToken')) components.add("Trashing token");
+        if (checkProperty(card, 'hasPlusOneActionToken')) components.add("+1 Action token");
+        if (checkProperty(card, 'hasPlusOneBuyToken')) components.add("+1 Buy token");
+        if (checkProperty(card, 'hasPlusOneCardToken')) components.add("+1 Card token");
+        if (checkProperty(card, 'hasPlusOneCoinToken')) components.add("+$1 token");
+        if (checkProperty(card, 'hasExile')) components.add("Exile mat");
+        if (name === 'Native Village') components.add("Native Village mat");
+        if (name === 'Island') components.add("Island mat");
+        if (name === 'Pirate Ship') components.add("Pirate Ship mat");
+      });
+
+      return Array.from(components).sort();
+    };
+
     const App = () => {
     const allAvailableCards = window.dominionCards;
     const allAvailableAllies = window.dominionAllies;
@@ -1100,6 +1176,12 @@
 
     const sortedKingdom = sortKingdom(displayCards);
 
+    const activeComponents = getRequiredComponents(
+        kingdom, 
+        landscapes, 
+        [baneCard, approachingArmyCard, ...extraPiles.map(p => p.card)]
+    );
+
     const CardBox = ({ card, onClick, isSelected, traitName, isBane, markerText }) => {
         const activeBanners = [
             traitName && { text: traitName, color: 'bg-purple-600' },
@@ -1457,36 +1539,51 @@
                     Click "Randomize!" to generate a kingdom
                 </div>
                 ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                    {sortedKingdom.map((card, idx) => (
-                    <CardBox
-                        key={card.name}
-                        card={card}
-                        onClick={handleItemClick}
-                        isSelected={selectedItem?.name === card.name}
-                        traitName={userConfig.assignedTraits?.find(t => t.cardName === card.name)?.traitName}
-                        markerText={approachingArmyCard?.name === card.name ? 'Approaching Army' : null}
-                        isBane={baneCard?.name === card.name}
-                    />
-                    ))}
-                    {extraPiles.map(pile => (
+                <div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                        {sortedKingdom.map((card, idx) => (
                         <CardBox
-                            key={pile.card.name}
-                            card={pile.card}
+                            key={card.name}
+                            card={card}
                             onClick={handleItemClick}
-                            isSelected={selectedItem?.name === pile.card.name}
-                            markerText={pile.reason}
+                            isSelected={selectedItem?.name === card.name}
+                            traitName={userConfig.assignedTraits?.find(t => t.cardName === card.name)?.traitName}
+                            markerText={approachingArmyCard?.name === card.name ? 'Approaching Army' : null}
+                            isBane={baneCard?.name === card.name}
                         />
-                    ))}
-                    {landscapes.map(l => (
-                        <LandscapeBox 
-                            key={l.name} 
-                            landscape={l} 
-                            type={l.type} 
-                            onClick={handleItemClick}
-                            isSelected={selectedItem?.name === l.name} />
-                ))}
-                </div>
+                        ))}
+                        {extraPiles.map(pile => (
+                            <CardBox
+                                key={pile.card.name}
+                                card={pile.card}
+                                onClick={handleItemClick}
+                                isSelected={selectedItem?.name === pile.card.name}
+                                markerText={pile.reason}
+                            />
+                        ))}
+                        {landscapes.map(l => (
+                            <LandscapeBox 
+                                key={l.name} 
+                                landscape={l} 
+                                type={l.type} 
+                                onClick={handleItemClick}
+                                isSelected={selectedItem?.name === l.name} />
+                        ))}
+                    </div>
+
+                    {activeComponents.length > 0 && (
+                        <div className="mt-6 bg-white rounded-lg shadow p-4 border border-gray-200">
+                            <h3 className="font-bold text-gray-700 mb-3 text-sm uppercase tracking-wide">Required Components</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {activeComponents.map(c => (
+                                    <span key={c} className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-semibold border border-indigo-200 shadow-sm">
+                                        {c}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div> 
                 )}
             </div>
             </div>
