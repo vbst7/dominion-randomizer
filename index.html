@@ -118,12 +118,12 @@
       const checkProperty = (item, prop) => {
         if (item[prop]) return true;
         const name = item.name;
-        if (prop === 'hasCoffers') return ['Baker', 'Butcher', 'Candlestick Maker', 'Merchant Guild', 'Plaza', 'Patron', 'Silk Merchant', 'Spices', 'Swashbuckler', 'Villain', 'Guildhall', 'Exploration', 'Pageant'].includes(name);
+        if (prop === 'hasCoffers') return ['Baker', 'Butcher', 'Candlestick Maker', 'Merchant Guild', 'Plaza', 'Patron', 'Silk Merchant', 'Spices', 'Swashbuckler', 'Villain', 'Guildhall', 'Exploration', 'Pageant', 'Joust', 'Ducat', 'Footpad'].includes(name);
         if (prop === 'hasVillagers') return ['Acting Troupe', 'Lackeys', 'Patron', 'Recruiter', 'Sculptor', 'Silk Merchant', 'Academy', 'Exploration'].includes(name);
-        if (prop === 'hasVP') return ['Bishop', 'Monument', 'Goons', 'Encampment', 'Patrician', 'Sacrifice', 'Temple', 'Wild Hunt', 'Triumph', 'Wedding', 'Aqueduct', 'Arena', 'Basilica', 'Baths', 'Battlefield', 'Colonnade', 'Defiled Shrine', 'Labyrinth', 'Tomb', 'Collection', 'Investment'].includes(name);
-        if (prop === 'hasHorses') return ['Cavalry', 'Demand', 'Groom', 'Hostelry', 'Livery', 'Paddock', 'Ride', 'Scrap', 'Sleigh', 'Stampede', 'Supplies'].includes(name);
+        if (prop === 'hasVP') return ['Bishop', 'Monument', 'Goons', 'Encampment', 'Patrician', 'Sacrifice', 'Temple', 'Wild Hunt', 'Triumph', 'Wedding', 'Aqueduct', 'Arena', 'Basilica', 'Baths', 'Battlefield', 'Colonnade', 'Defiled Shrine', 'Labyrinth', 'Tomb', 'Collection', 'Investment', 'Chariot Race', 'Farmers\'s Market', 'Castles', 'Ritual', 'Salt the Earth', 'Emporium', 'Groundskeeper', 'Plunder', 'Conquest', 'Dominate', 'Mountain Pass'].includes(name);
+        if (prop === 'hasHorses') return ['Bargain', 'Cavalry', 'Demand', 'Groom', 'Hostelry', 'Livery', 'Paddock', 'Ride', 'Scrap', 'Sleigh', 'Stampede', 'Supplies'].includes(name);
         if (prop === 'hasLoot') return ['Jewelled Egg', 'Search', 'Cutthroat', 'Pickaxe', 'Wealthy Village', 'Sack of Loot', 'Cursed', 'Peril', 'Looting', 'Invasion', 'Prosper'].includes(name);
-        if (prop === 'isFate') return ['Bard', 'Blessed Village', 'Druid', 'Fool', 'Idol', 'Sacred Grove', 'Tracker'].includes(name);
+        if (prop === 'isFate') return ['Bard', 'Blessed Village', 'Druid', 'Fool', 'Idol', 'Pixie', 'Sacred Grove', 'Tracker'].includes(name);
         if (prop === 'isDoom') return ['Cursed Village','Leprechaun', 'Skulk', 'Tormentor', 'Vampire', 'Werewolf'].includes(name);
         if (prop === 'hasCoinTokens') return ['Trade Route', 'Sinister Plot', 'Pirate Ship', 'Forts'].includes(name);
         if (prop === 'hasDebt') return ['Capital', 'Change', 'Craftsman', 'Credit', 'Gold Mine', 'Harsh Winter', 'Imperial Envoy', 'Litter', 'Mountain Pass', 'Root Cellar', 'Tax'].includes(name);
@@ -138,6 +138,7 @@
         if (prop === 'hasPlusOneCardToken') return ['Peasant', 'Pathfinding'].includes(name);
         if (prop === 'hasPlusOneCoinToken') return ['Peasant', 'Training'].includes(name);
         if (prop === 'hasExile') return ['Banish', 'Bounty Hunter', 'Sanctuary', 'Stockpile', 'Cardinal', 'Coven', 'Gatekeeper', 'Camel Train', 'Displace', 'Enclave', 'Invest', 'Transport', 'Way of the Camel', 'Way of the Worm'].includes(name);
+        if (prop === 'hasTavern') return ['Coin of the Realm', 'Ratcatcher', 'Guide', 'Duplicate', 'Transmogrify', 'Distant Lands', 'Royal Carriage', 'Wine Merchant', 'Peasant', 'Miser'].includes(name);
         return false;
       };
 
@@ -180,6 +181,10 @@
         if (name === 'Native Village') components.add("Native Village mat");
         if (name === 'Island') components.add("Island mat");
         if (name === 'Pirate Ship') components.add("Pirate Ship mat");
+        if (name === 'Trade Route') components.add("Trade Route mat");
+        if (name === 'Embargo') components.add("Embargo tokens");
+        if (card.type === 'Project') components.add("Project cubes")
+        if (checkProperty(card, 'isReserve')) components.add("Tavern mat");
       });
 
       return Array.from(components).sort();
