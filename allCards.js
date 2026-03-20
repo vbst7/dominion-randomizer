@@ -2110,7 +2110,7 @@ const allCards = [
     "costDebt": 8
   },
   {
-    "name": "Encampment / Plunder",
+    "name": "Encampment",
     "cost": 2,
     "isAction": true,
     "isDrawer": true,
@@ -2124,7 +2124,7 @@ const allCards = [
     "isActionSupplier": true
   },
   {
-    "name": "Patrician / Emporium",
+    "name": "Patrician",
     "cost": 2,
     "isAction": true,
     "isDrawer": false,
@@ -2137,7 +2137,7 @@ const allCards = [
     "set": "Empires"
   },
   {
-    "name": "Settlers / Bustling Village",
+    "name": "Settlers",
     "cost": 2,
     "isAction": true,
     "isDrawer": false,
@@ -2164,7 +2164,7 @@ const allCards = [
     "isVictory": true
   },
   {
-    "name": "Catapult / Rocks",
+    "name": "Catapult",
     "cost": 3,
     "isAction": true,
     "isDrawer": false,
@@ -2217,7 +2217,7 @@ const allCards = [
     "isBuySupplier": true
   },
   {
-    "name": "Gladiator / Fortune",
+    "name": "Gladiator",
     "cost": 3,
     "isAction": true,
     "isDrawer": false,
@@ -4952,7 +4952,7 @@ const allCards = [
     "name": "Envoy",
     "cost": 4,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -4982,7 +4982,7 @@ const allCards = [
     "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 10,
@@ -5034,21 +5034,20 @@ const allCards = [
     "isDrawer": false,
     "isDuration": true,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 4,
-    "set": "Promos",
-    "isActionSupplier": true
+    "set": "Promos"
   },
   {
-    "name": "Sauna / Avanto",
+    "name": "Sauna",
     "cost": 4,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 9,
@@ -5586,7 +5585,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 5,
-    "set": "Renaissance"
+    "set": "Renaissance",
+    "isActionSupplier": true
   },
   {
     "name": "Cargo Ship",
@@ -5714,7 +5714,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": true,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
@@ -5758,7 +5758,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 5,
-    "set": "Renaissance"
+    "set": "Renaissance",
+    "isActionSupplier": true
   },
   {
     "name": "Scepter",
@@ -6824,84 +6825,84 @@ const allProphecies = [
     "poolLevel": 8,
     "set": "Rising Sun"
   },
-//   {
-//     "name": "Bureaucracy",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Divine Wind",
-//     "type": "Prophecy",
-//     "poolLevel": 10,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Enlightenment",
-//     "type": "Prophecy",
-//     "poolLevel": 10,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Flourishing Trade",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Good Harvest",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Great Leader",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Growth",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Harsh Winter",
-//     "type": "Prophecy",
-//     "poolLevel": 10,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Kind Emperor",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Panic",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Progress",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Rapid Expansion",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
-//   {
-//     "name": "Sickness",
-//     "type": "Prophecy",
-//     "poolLevel": 8,
-//     "set": "Rising Sun"
-//   },
+  {
+    "name": "Bureaucracy",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Divine Wind",
+    "type": "Prophecy",
+    "poolLevel": 10,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Enlightenment",
+    "type": "Prophecy",
+    "poolLevel": 10,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Flourishing Trade",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Good Harvest",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Great Leader",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Growth",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Harsh Winter",
+    "type": "Prophecy",
+    "poolLevel": 10,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Kind Emperor",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Panic",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Progress",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Rapid Expansion",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
+  {
+    "name": "Sickness",
+    "type": "Prophecy",
+    "poolLevel": 8,
+    "set": "Rising Sun"
+  },
 ]
 
 const allLandscapes = [
