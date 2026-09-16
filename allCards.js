@@ -6,7 +6,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": true,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
@@ -222,7 +222,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 9,
-    "set": "Adventures"
+    "set": "Adventures",
+    "isActionSupplier": true
   },
   {
     "name": "Peasant",
@@ -236,7 +237,8 @@ const allCards = [
     "isReaction": false,
     "poolLevel": 9,
     "set": "Adventures",
-    "isBuySupplier": true
+    "isBuySupplier": true,
+    "isActionSupplier": true
   },
   {
     "name": "Port",
@@ -273,7 +275,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 7,
@@ -286,7 +288,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 5,
@@ -416,7 +418,7 @@ const allCards = [
     "name": "Apothecary",
     "cost": 2,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -513,7 +515,7 @@ const allCards = [
     "name": "Scrying Pool",
     "cost": 2,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -725,15 +727,14 @@ const allCards = [
     "cost": 3,
     "isAction": false,
     "isDrawer": false,
-    "isDuration": true,
+    "isDuration": false,
     "isTreasure": false,
     "isTrashing": true,
     "isAttack": true,
     "isReaction": false,
-    "isLiaisoon": true,
+    "isLiaison": true,
     "poolLevel": 10,
-    "set": "Allies",
-    "isActionSupplier": true
+    "set": "Allies"
   },
   {
     "name": "Broker",
@@ -963,7 +964,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
-    "set": "Allies"
+    "set": "Allies",
+    "isActionSupplier": true
   },
   {
     "name": "Swap",
@@ -996,7 +998,7 @@ const allCards = [
     "name": "Adventurer",
     "cost": 6,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -1022,7 +1024,7 @@ const allCards = [
     "name": "Cellar",
     "cost": 2,
     "isAction": true,
-    "isDrawer": true,
+    "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -1150,7 +1152,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 1,
-    "set": "Base Set"
+    "set": "Base Set",
+    "isBuySupplier": true
   },
   {
     "name": "Militia",
@@ -1267,7 +1270,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 1,
-    "set": "Base Set"
+    "set": "Base Set",
+    "isActionSupplier": true
   },
   {
     "name": "Village",
@@ -1307,7 +1311,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 1,
-    "set": "Base Set - Removed Cards"
+    "set": "Base Set - Removed Cards",
+    "isBuySupplier": true
   },
   {
     "name": "Workshop",
@@ -1461,7 +1466,7 @@ const allCards = [
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
-    "isAttack": false,
+    "isAttack": true,
     "isReaction": false,
     "poolLevel": 1,
     "set": "Cornucopia - Removed Cards"
@@ -1697,10 +1702,10 @@ const allCards = [
     "name": "Urchin",
     "cost": 3,
     "isAction": true,
-    "isDrawer": true,
+    "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": true,
     "isReaction": false,
     "poolLevel": 9,
@@ -1713,7 +1718,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": true,
+    "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 4,
@@ -1739,7 +1744,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 6,
@@ -1770,7 +1775,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 6,
-    "set": "Dark Ages"
+    "set": "Dark Ages",
+    "isActionSupplier": true
   },
   {
     "name": "Squire",
@@ -1820,7 +1826,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": true,
+    "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 9,
@@ -1851,13 +1857,14 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 4,
-    "set": "Dark Ages"
+    "set": "Dark Ages",
+    "isActionSupplier": true
   },
   {
     "name": "Hermit",
     "cost": 3,
     "isAction": true,
-    "isDrawer": true,
+    "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": true,
@@ -1896,7 +1903,7 @@ const allCards = [
     "name": "Storeroom",
     "cost": 3,
     "isAction": true,
-    "isDrawer": true,
+    "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -1910,7 +1917,7 @@ const allCards = [
     "name": "Hunting Grounds",
     "cost": 6,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -1939,12 +1946,12 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": true,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
     "set": "Dark Ages",
-    "isBuySupplier": true
+    "isBuySupplier": true,
   },
   {
     "name": "Cultist",
@@ -2005,7 +2012,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 2,
@@ -2250,7 +2257,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 4,
@@ -2268,7 +2275,8 @@ const allCards = [
     "isReaction": false,
     "poolLevel": 10,
     "set": "Empires",
-    "isActionSupplier": true
+    "isActionSupplier": true,
+    "isBuySupplier": true
   },
   {
     "name": "Archive",
@@ -2294,7 +2302,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 5,
-    "set": "Empires"
+    "set": "Empires",
+    "isBuySupplier": true
   },
   {
     "name": "Charm",
@@ -2321,7 +2330,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 10,
-    "set": "Empires"
+    "set": "Empires",
+    "isActionSupplier": true
   },
   {
     "name": "Forum",
@@ -2560,8 +2570,7 @@ const allCards = [
     "isReaction": false,
     "poolLevel": 10,
     "set": "Guilds / Cornucopia - 2E Cards",
-    "isBuySupplier": true,
-    "isActionSupplier": true
+    "isBuySupplier": true
   },
   {
     "name": "Shop",
@@ -2607,15 +2616,14 @@ const allCards = [
     "name": "Carnival",
     "cost": 5,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 2,
-    "set": "Guilds / Cornucopia - 2E Cards",
-    "isActionSupplier": true
+    "set": "Guilds / Cornucopia - 2E Cards"
   },
   {
     "name": "Ferryman",
@@ -2628,8 +2636,7 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 9,
-    "set": "Guilds / Cornucopia - 2E Cards",
-    "isActionSupplier": true
+    "set": "Guilds / Cornucopia - 2E Cards"
   },
   {
     "name": "Footpad",
@@ -2648,7 +2655,7 @@ const allCards = [
     "name": "Joust",
     "cost": 5,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -2656,7 +2663,8 @@ const allCards = [
     "isReaction": false,
     "poolLevel": 10,
     "set": "Guilds / Cornucopia - 2E Cards",
-    "isActionSupplier": true
+    "isActionSupplier": true,
+    "isBuySupplier": true
   },
   {
     "name": "Border Village",
@@ -2692,7 +2700,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": true,
     "poolLevel": 5,
@@ -2772,7 +2780,7 @@ const allCards = [
     "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
@@ -2812,7 +2820,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 4,
@@ -3092,7 +3100,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 6,
@@ -3144,7 +3152,7 @@ const allCards = [
     "name": "Conspirator",
     "cost": 4,
     "isAction": true,
-    "isDrawer": true,
+    "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -3344,7 +3352,7 @@ const allCards = [
     "name": "Ironworks",
     "cost": 4,
     "isAction": true,
-    "isDrawer": true,
+    "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -3430,7 +3438,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 1,
-    "set": "Intrigue - Removed Cards"
+    "set": "Intrigue - Removed Cards",
+    "isActionSupplier": true
   },
   {
     "name": "Great Hall",
@@ -3484,7 +3493,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": true,
     "poolLevel": 5,
-    "set": "Intrigue - 2E Cards"
+    "set": "Intrigue - 2E Cards",
+    "isActionSupplier": true
   },
   {
     "name": "Mill",
@@ -3537,7 +3547,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 7,
-    "set": "Intrigue - 2E Cards"
+    "set": "Intrigue - 2E Cards",
+    "isBuySupplier": true
   },
   {
     "name": "Replace",
@@ -3546,7 +3557,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": true,
     "isReaction": false,
     "poolLevel": 2,
@@ -3624,7 +3635,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 8,
@@ -3864,14 +3875,15 @@ const allCards = [
     "name": "Mastermind",
     "cost": 5,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": true,
     "isTreasure": false,
     "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
-    "set": "Menagerie"
+    "set": "Menagerie",
+    "isActionSupplier": true
   },
   {
     "name": "Paddock",
@@ -3946,7 +3958,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": true,
+    "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 10,
@@ -4001,7 +4013,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "isNight": true,
@@ -4168,7 +4180,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
-    "set": "Nocturne"
+    "set": "Nocturne",
+    "isActionSupplier": true
   },
   {
     "name": "Devil's Workshop",
@@ -4205,7 +4218,7 @@ const allCards = [
     "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 10,
@@ -5208,14 +5221,15 @@ const allCards = [
     "name": "King's Court",
     "cost": 7,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 6,
-    "set": "Prosperity"
+    "set": "Prosperity",
+    "isActionSupplier": true
   },
   {
     "name": "Hoard",
@@ -5302,7 +5316,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 4,
@@ -5422,7 +5436,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": true,
-    "isTrashing": true,
+    "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
@@ -5631,7 +5645,7 @@ const allCards = [
     "name": "Flag Bearer",
     "cost": 4,
     "isAction": true,
-    "isDrawer": true,
+    "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -5804,7 +5818,7 @@ const allCards = [
     "name": "Seer",
     "cost": 5,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": false,
     "isTreasure": false,
     "isTrashing": false,
@@ -5997,7 +6011,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": false,
     "isTreasure": false,
-    "isTrashing": true,
+    "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 7,
@@ -6112,7 +6126,8 @@ const allCards = [
     "isReaction": false,
     "poolLevel": 8,
     "isOmen": true,
-    "set": "Rising Sun"
+    "set": "Rising Sun",
+    "isActionSupplier": true
   },
   {
     "name": "Litter",
@@ -6205,7 +6220,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
-    "set": "Rising Sun"
+    "set": "Rising Sun",
+    "isBuySupplier": true
   },
   {
     "name": "Ghost Ship",
@@ -6452,7 +6468,7 @@ const allCards = [
     "name": "Caravan",
     "cost": 4,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": true,
     "isTreasure": false,
     "isTrashing": false,
@@ -6563,7 +6579,8 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 3,
-    "set": "Seaside - 2E Cards"
+    "set": "Seaside - 2E Cards",
+    "isBuySupplier": true
   },
   {
     "name": "Monkey",
@@ -6611,7 +6628,7 @@ const allCards = [
     "isDrawer": false,
     "isDuration": true,
     "isTreasure": false,
-    "isTrashing": false,
+    "isTrashing": true,
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 8,
@@ -6660,7 +6677,7 @@ const allCards = [
     "name": "Sea Witch",
     "cost": 5,
     "isAction": true,
-    "isDrawer": false,
+    "isDrawer": true,
     "isDuration": true,
     "isTreasure": false,
     "isTrashing": false,
@@ -6670,6 +6687,7 @@ const allCards = [
     "set": "Seaside - 2E Cards"
   }
 ]
+
 
 const allAllies = [
   {
