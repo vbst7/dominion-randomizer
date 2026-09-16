@@ -992,33 +992,20 @@
         }
 
         // --- Default logic for replacing a regular kingdom card ---
-        const isCardLoadBearing = (card, currentKingdom) => {
-            if (minPotion > 0 && card.costPotion) {
-                if (currentKingdom.filter(c => c.costPotion).length <= minPotion) return true;
-            }
-            // Complexity check
-            const { minCardsBelowComplexity, minComplexityLevel } = userConfig;
-            if (minCardsBelowComplexity > 0 && (card.poolLevel || 1) <= minComplexityLevel) {
-                const count = currentKingdom.filter(c => (c.poolLevel || 1) <= minComplexityLevel).length;
-                if (count <= minCardsBelowComplexity) return true;
-            }
-            for (const [attr, opt] of Object.entries({
-                isDrawer: 'requireDrawer',
-                isTrashing: 'requireTrashing',
-                isActionSupplier: 'requireActions',
-                isBuySupplier: 'requireBuy',
-            })) {
-                if (selectedOptions[opt] && card[attr]) {
-                    if (currentKingdom.filter(c => c[attr]).length === 1) return true;
-                }
+
+        // Check which required attributes the selected card is load-bearing for.
+        // Only the options the card is actually load-bearing for need to be
+        // fulfilled by the replacement — options already satisfied elsewhere
+        // in the kingdom can be handled by any card.
+        const isCardLoadBearingFor = (card, currentKingdom, attr) => {
+            if (selectedOptions[{'isDrawer': 'requireDrawer', 'isTrashing': 'requireTrashing', 'isActionSupplier': 'requireActions', 'isBuySupplier': 'requireBuy'}[attr]] && card[attr]) {
+                if (currentKingdom.filter(c => c[attr]).length === 1) return true;
             }
             return false;
         };
 
-        // Check if the selected card is load-bearing for any required attribute
-        const requiredAttributes = Object.entries(selectedOptions)
-            .filter(([opt, val]) => val && isCardLoadBearing(selectedItem, kingdom))
-            .map(([opt]) => ({'requireDrawer': 'isDrawer', 'requireTrashing': 'isTrashing', 'requireActions': 'isActionSupplier', 'requireBuy': 'requireBuy'}[opt]));
+        const requiredAttributes = ['isDrawer', 'isTrashing', 'isActionSupplier', 'isBuySupplier']
+            .filter(attr => isCardLoadBearingFor(selectedItem, kingdom, attr));
 
         // Check complexity requirement specifically
         const { minCardsBelowComplexity, minComplexityLevel } = userConfig;
