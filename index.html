@@ -545,17 +545,24 @@
               return true;
           }
       }
-      // Check other requirements
+      // Check other requirements.
+      // Extra pile cards (Ferryman/Riverboat targets) count toward requirements,
+      // and their source card acts as the provider: if this card is the source of
+      // an extra pile, replacing it would also remove the pile card, so the pile
+      // card's attributes are lost along with it.
       for (const [attr, opt] of Object.entries({
         isDrawer: 'requireDrawer',
         isTrashing: 'requireTrashing',
         isActionSupplier: 'requireActions',
         isBuySupplier: 'requireBuy',
       })) {
-        if (selectedOptions[opt] && card[attr]) {
-          if (currentKingdom.filter(c => c[attr]).length === 1) {
-            return true;
-          }
+        if (!selectedOptions[opt]) continue;
+        const pileCard = newExtraPiles.find(p => p.reason === card.name)?.card;
+        const loss = (card[attr] ? 1 : 0) + (pileCard && pileCard[attr] ? 1 : 0);
+        if (loss === 0) continue;
+        const providers = [...currentKingdom, ...newExtraPiles.map(p => p.card)].filter(c => c[attr]).length;
+        if (providers - loss <= 0) {
+          return true;
         }
       }
       return false;
@@ -564,7 +571,9 @@
     // Check options and replace if needed
     const checkAndReplace = (attribute, option) => {
       if (!selectedOptions[option]) return;
-      if (fullKingdom.some(c => c[attribute])) return;
+      // Re-check against the live kingdom rather than the pre-swap snapshot;
+      // extra pile cards count toward the requirement.
+      if ([...newKingdom, ...newExtraPiles.map(p => p.card)].some(c => c[attribute])) return;
 
       // Find a card to replace that is not load-bearing
       let replaced = false;
@@ -869,6 +878,24 @@
         const fullKingdomWithExtras = [...kingdom, baneCard, ...extraPiles.map(p => p.card)].filter(Boolean);
         const available = getAvailablePool().cards.filter(c => !fullKingdomWithExtras.some(k => k.name === c.name));
 
+        // Check which required attributes the selected card is load-bearing for.
+        // Only the options the card is actually load-bearing for need to be
+        // fulfilled by the replacement — options already satisfied elsewhere
+        // in the kingdom can be handled by any card.
+        // Extra pile cards (Ferryman/Riverboat targets) count toward requirements,
+        // and their source card is load-bearing for any attribute its pile uniquely
+        // provides (e.g., Ferryman when its Remodel pile is the only trasher):
+        // replacing the source also removes the pile card, so the pile card's
+        // attributes are lost along with it.
+        const isCardLoadBearingFor = (card, currentKingdom, attr) => {
+            if (!selectedOptions[{'isDrawer': 'requireDrawer', 'isTrashing': 'requireTrashing', 'isActionSupplier': 'requireActions', 'isBuySupplier': 'requireBuy'}[attr]]) return false;
+            const pileCard = extraPiles.find(p => p.reason === card.name)?.card;
+            const loss = (card[attr] ? 1 : 0) + (pileCard && pileCard[attr] ? 1 : 0);
+            if (loss === 0) return false;
+            const providers = [...currentKingdom, ...extraPiles.map(p => p.card)].filter(c => c[attr]).length;
+            return providers - loss <= 0;
+        };
+
         // --- Handle replacing SPECIAL cards (Bane, AA Attack, Extra Piles) ---
 
         // Handle replacing the Bane card
@@ -903,12 +930,27 @@
             let potentialReplacements = [];
             let alertMessage = "";
 
+            // The pile card itself may be the unique provider of a required
+            // attribute (e.g., Remodel as the only trasher) — preserve that.
+            const pileRequiredAttrs = ['isDrawer', 'isTrashing', 'isActionSupplier', 'isBuySupplier']
+                .filter(attr => isCardLoadBearingFor(selectedItem, kingdom, attr));
+
             if (extraPile.reason === 'Ferryman') {
                 potentialReplacements = available.filter(c => c.cost === 3 || c.cost === 4);
                 alertMessage = "No valid replacement for the Ferryman pile could be found (must cost $3 or $4).";
             } else if (extraPile.reason === 'Riverboat') {
                 potentialReplacements = available.filter(c => c.isAction && !c.isDuration && c.cost === 5);
                 alertMessage = "No valid replacement for the Riverboat pile could be found (must be a non-Duration Action costing $5).";
+            }
+
+            if (pileRequiredAttrs.length > 0) {
+                potentialReplacements = potentialReplacements.filter(c =>
+                    pileRequiredAttrs.every(attr => c[attr])
+                );
+                if (potentialReplacements.length === 0) {
+                    alert(`No valid replacement for the ${extraPile.reason} pile could be found that also satisfies: ${pileRequiredAttrs.join(', ')}`);
+                    return;
+                }
             }
 
             if (potentialReplacements.length === 0) {
@@ -992,17 +1034,6 @@
         }
 
         // --- Default logic for replacing a regular kingdom card ---
-
-        // Check which required attributes the selected card is load-bearing for.
-        // Only the options the card is actually load-bearing for need to be
-        // fulfilled by the replacement — options already satisfied elsewhere
-        // in the kingdom can be handled by any card.
-        const isCardLoadBearingFor = (card, currentKingdom, attr) => {
-            if (selectedOptions[{'isDrawer': 'requireDrawer', 'isTrashing': 'requireTrashing', 'isActionSupplier': 'requireActions', 'isBuySupplier': 'requireBuy'}[attr]] && card[attr]) {
-                if (currentKingdom.filter(c => c[attr]).length === 1) return true;
-            }
-            return false;
-        };
 
         const requiredAttributes = ['isDrawer', 'isTrashing', 'isActionSupplier', 'isBuySupplier']
             .filter(attr => isCardLoadBearingFor(selectedItem, kingdom, attr));
