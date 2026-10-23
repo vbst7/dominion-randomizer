@@ -8,8 +8,13 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="./allCards.js"></script>
-  <script src="./allMixes.js"></script>
+  <script>
+    // Cache-bust the local data files so categorization fixes are always
+    // picked up on reload — otherwise the browser can silently serve a stale
+    // allCards.js and generation runs against outdated card attributes.
+    document.write('<script src="./allCards.js?v=' + Date.now() + '"><\/script>');
+    document.write('<script src="./allMixes.js?v=' + Date.now() + '"><\/script>');
+  </script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
@@ -570,10 +575,10 @@
 
     // Check options and replace if needed
     const checkAndReplace = (attribute, option) => {
-      if (!selectedOptions[option]) return;
+      if (!selectedOptions[option]) return true;
       // Re-check against the live kingdom rather than the pre-swap snapshot;
       // extra pile cards count toward the requirement.
-      if ([...newKingdom, ...newExtraPiles.map(p => p.card)].some(c => c[attribute])) return;
+      if ([...newKingdom, ...newExtraPiles.map(p => p.card)].some(c => c[attribute])) return true;
 
       // Find a card to replace that is not load-bearing
       let replaced = false;
@@ -598,7 +603,9 @@
 
       if (!replaced) {
         console.warn(`Could not find a non-load-bearing card to replace to satisfy the "${option}" requirement.`);
+        return false;
       }
+      return true;
     };
 
     // Handle Complexity Constraint
@@ -637,14 +644,11 @@
         }
     }
 
-    // Run constraint checks
-    checkAndReplace('isDrawer', 'requireDrawer');
-    checkAndReplace('isTrashing', 'requireTrashing');
-    checkAndReplace('isActionSupplier', 'requireActions');
-    checkAndReplace('isBuySupplier', 'requireBuy');
-
-    // After other constraints are met, handle the conditional min-potion rule
-    const currentPotionCount = fullKingdom.filter(c => c.costPotion).length;
+    // After other constraints are met, handle the conditional min-potion rule.
+    // This runs BEFORE the requirement checks so a potion swap can never evict
+    // a card that was added to satisfy a requirement (sole providers are still
+    // load-bearing and protected either way).
+    const currentPotionCount = [...newKingdom, ...newExtraPiles.map(p => p.card)].filter(c => c.costPotion).length;
     if (currentPotionCount > 0 && currentPotionCount < minPotion) {
         const potionsNeeded = minPotion - currentPotionCount;
         let availablePotions = remainingForHandlers.filter(c => c.costPotion);
@@ -675,6 +679,31 @@
                 break; // No swappable cards left
             }
         }
+    }
+
+    // Run requirement checks LAST so their swap-ins can't be evicted by other steps.
+    // Each check reports success; if a requirement can't be satisfied (e.g., every
+    // matching card is banned), abort generation and tell the user.
+    const failedRequirements = [];
+    for (const [attribute, option, label] of [
+        ['isDrawer', 'requireDrawer', 'Require Drawer'],
+        ['isTrashing', 'requireTrashing', 'Require Trashing'],
+        ['isActionSupplier', 'requireActions', 'Require +2 Action'],
+        ['isBuySupplier', 'requireBuy', 'Require Buy'],
+    ]) {
+        if (!checkAndReplace(attribute, option)) failedRequirements.push(label);
+    }
+
+    if (failedRequirements.length > 0) {
+        alert(
+            'Could not generate a kingdom that satisfies all of your requirements!\n\n' +
+            'Unfulfilled requirement(s):\n' +
+            failedRequirements.map(r => `  • ${r}`).join('\n') +
+            '\n\nNo card in the remaining pool can provide these attributes — all matching cards ' +
+            'may be banned or filtered out. Unban some cards (or disable the requirement) and try again.\n\n' +
+            'The previous kingdom has been left unchanged.'
+        );
+        return;
     }
 
     // --- Handle Landscapes that depend on kingdom cards (Ally/Prophecy) ---
@@ -896,14 +925,49 @@
             return providers - loss <= 0;
         };
 
+        // Which enabled requirements will be unmet once a given card is removed?
+        // Used so that replacements must satisfy them, and so that an impossible
+        // replacement can be detected and alerted on — mirroring the behavior of
+        // the Randomize button. Covers both "this card was the sole provider"
+        // and "the requirement was never satisfied to begin with" (e.g., the
+        // option was toggled on after generation).
+        const requirementDefs = [
+            { attr: 'isDrawer', option: 'requireDrawer', label: 'Require Drawer' },
+            { attr: 'isTrashing', option: 'requireTrashing', label: 'Require Trashing' },
+            { attr: 'isActionSupplier', option: 'requireActions', label: 'Require +2 Action' },
+            { attr: 'isBuySupplier', option: 'requireBuy', label: 'Require Buy' },
+        ];
+        const getUnmetRequirements = (removedName) => {
+            const removedPileCard = extraPiles.find(p => p.reason === removedName)?.card;
+            const removedNames = removedPileCard ? [removedName, removedPileCard.name] : [removedName];
+            const cardsAfterRemoval = [...kingdom, ...extraPiles.map(p => p.card)]
+                .filter(Boolean)
+                .filter(c => !removedNames.includes(c.name));
+            return requirementDefs.filter(r =>
+                selectedOptions[r.option] && !cardsAfterRemoval.some(c => c[r.attr])
+            );
+        };
+
         // --- Handle replacing SPECIAL cards (Bane, AA Attack, Extra Piles) ---
 
         // Handle replacing the Bane card
         if (baneCard && selectedItem.name === baneCard.name) {
-            const potentialReplacements = available.filter(c => (c.cost === 2 || c.cost === 3) && !c.costPotion);
+            let potentialReplacements = available.filter(c => (c.cost === 2 || c.cost === 3) && !c.costPotion);
             if (potentialReplacements.length === 0) {
                 alert("No valid replacement for the Bane card could be found (must cost $2 or $3).");
                 return;
+            }
+            // The bane is part of the kingdom, so the replacement must also
+            // satisfy any requirement that would otherwise go unmet.
+            const unmetRequirements = getUnmetRequirements(selectedItem.name);
+            if (unmetRequirements.length > 0) {
+                potentialReplacements = potentialReplacements.filter(c =>
+                    unmetRequirements.every(u => c[u.attr])
+                );
+                if (potentialReplacements.length === 0) {
+                    alert(`No valid replacement for the Bane card could be found that also satisfies: ${unmetRequirements.map(u => u.label).join(', ')}`);
+                    return;
+                }
             }
             const newBaneCard = potentialReplacements[Math.floor(Math.random() * potentialReplacements.length)];
             setBaneCard(newBaneCard);
@@ -913,10 +977,22 @@
 
         // Handle replacing the Approaching Army card
         if (approachingArmyCard && selectedItem.name === approachingArmyCard.name) {
-            const potentialReplacements = available.filter(c => c.isAttack);
+            let potentialReplacements = available.filter(c => c.isAttack);
             if (potentialReplacements.length === 0) {
                 alert("No valid replacement for the Approaching Army card could be found (must be an Attack card).");
                 return;
+            }
+            // The AA attack card is part of the kingdom, so the replacement
+            // must also satisfy any requirement that would otherwise go unmet.
+            const unmetRequirements = getUnmetRequirements(selectedItem.name);
+            if (unmetRequirements.length > 0) {
+                potentialReplacements = potentialReplacements.filter(c =>
+                    unmetRequirements.every(u => c[u.attr])
+                );
+                if (potentialReplacements.length === 0) {
+                    alert(`No valid replacement for the Approaching Army card could be found that also satisfies: ${unmetRequirements.map(u => u.label).join(', ')}`);
+                    return;
+                }
             }
             const newAttackCard = potentialReplacements[Math.floor(Math.random() * potentialReplacements.length)];
             setApproachingArmyCard(newAttackCard);
@@ -932,8 +1008,12 @@
 
             // The pile card itself may be the unique provider of a required
             // attribute (e.g., Remodel as the only trasher) — preserve that.
+            // Also satisfy requirements that are currently unmet (e.g., a
+            // requirement toggled on after generation).
+            const unmetRequirements = getUnmetRequirements(selectedItem.name);
             const pileRequiredAttrs = ['isDrawer', 'isTrashing', 'isActionSupplier', 'isBuySupplier']
-                .filter(attr => isCardLoadBearingFor(selectedItem, kingdom, attr));
+                .filter(attr => isCardLoadBearingFor(selectedItem, kingdom, attr) ||
+                                unmetRequirements.some(u => u.attr === attr));
 
             if (extraPile.reason === 'Ferryman') {
                 potentialReplacements = available.filter(c => c.cost === 3 || c.cost === 4);
@@ -1035,8 +1115,14 @@
 
         // --- Default logic for replacing a regular kingdom card ---
 
-        const requiredAttributes = ['isDrawer', 'isTrashing', 'isActionSupplier', 'isBuySupplier']
-            .filter(attr => isCardLoadBearingFor(selectedItem, kingdom, attr));
+        // The replacement must satisfy every enabled requirement that will be
+        // unmet once this card is removed: either this card (or its extra pile)
+        // is currently the sole provider, or the requirement was never satisfied
+        // to begin with (e.g., the option was toggled on after generation).
+        // If no replacement can do this, alert instead of silently producing a
+        // kingdom that violates the requirement — same behavior as Randomize.
+        const unmetRequirements = getUnmetRequirements(selectedItem.name);
+        const requiredAttributes = unmetRequirements.map(u => u.attr);
 
         // Check complexity requirement specifically
         const { minCardsBelowComplexity, minComplexityLevel } = userConfig;
@@ -1061,7 +1147,14 @@
             );
 
             if (potentialReplacements.length === 0) {
-                alert(`No replacement cards available with required attributes: ${requiredAttributes.join(', ')}`);
+                alert(
+                    'Could not replace this card while keeping all of your requirements satisfied!\n\n' +
+                    'Unfulfilled requirement(s):\n' +
+                    unmetRequirements.map(u => `  • ${u.label}`).join('\n') +
+                    '\n\nNo card in the remaining pool can provide these attributes — all matching cards ' +
+                    'may be banned or filtered out. Unban some cards (or disable the requirement) and try again.\n\n' +
+                    'The kingdom has been left unchanged.'
+                );
                 return;
             }
             
@@ -1212,7 +1305,10 @@
             isBane && { text: 'Bane', color: 'bg-red-600' }
         ].filter(Boolean);
 
-        const marginClass = activeBanners.length === 0 ? '' : activeBanners.length === 1 ? 'mb-6' : activeBanners.length === 2 ? 'mb-11' : 'mb-16';
+        // Banners are absolutely positioned at the bottom and overlap the card's 12px bottom
+        // padding, so the set info only needs to clear (bannerHeight * count - 12px):
+        // 1 banner (20px) -> mb-2 (8px), 2 banners (40px) -> mb-7 (28px), 3 banners (60px) -> mb-12 (48px)
+        const marginClass = activeBanners.length === 0 ? '' : activeBanners.length === 1 ? 'mb-2' : activeBanners.length === 2 ? 'mb-7' : 'mb-12';
 
         // Logic to determine if a card is "Night" type only for styling
         const cardTypes = [];
@@ -1253,7 +1349,9 @@
                     <div className={`font-semibold text-sm leading-tight ${nameTextColor} text-right ml-2`}>{card.name}</div>
                 </div>
             </div>
-            <div className={`text-right mt-2 ${marginClass}`}>
+            {/* When banners are present, drop the mt-2 gap below the name to offset the
+                clearance margin, so a single banner (e.g. a Trait) adds no extra height */}
+            <div className={`text-right ${activeBanners.length > 0 ? '' : 'mt-2'} ${marginClass}`}>
                 <div className={`text-xs ${detailsTextColor} italic`}>{card.set}</div>
                 <div className={`text-xs ${detailsTextColor}`}>Lvl {card.poolLevel || 1}</div>
             </div>
@@ -1275,13 +1373,13 @@
 
     const LandscapeBox = ({ landscape, type, onClick, isSelected }) => {
         const colorMap = {
-            'Ally': 'bg-pink-200',
-            'Event': 'bg-blue-200',
+            'Ally': 'bg-orange-200',
+            'Event': 'bg-blue-100',
             'Prophecy': 'bg-purple-200',
-            'Landmark': 'bg-green-200',
-            'Project': 'bg-yellow-200',
-            'Way': 'bg-orange-200',
-            'Trait': 'bg-purple-300',
+            'Landmark': 'bg-green-500',
+            'Project': 'bg-pink-200',
+            'Way': 'bg-blue-200',
+            'Trait': 'bg-purple-400',
         };
         return (
             <div 
@@ -1453,7 +1551,7 @@
                         </label>
                         <input
                             type="range"
-                            min="0"
+                            min="1"
                             max="10"
                             value={minPotion}
                             onChange={(e) => setUserConfig(prev => ({ ...prev, minPotion: parseInt(e.target.value) }))}
