@@ -2117,7 +2117,21 @@ const allCards = [
     "costDebt": 8
   },
   {
-    "name": "Encampment",
+    "name": "Encampment / Plunder",
+    "cost": 2,
+    "isAction": true,
+    "isTreasure": false,
+    "isDrawer": true,
+    "isDuration": false,
+    "isTrashing": false,
+    "isAttack": false,
+    "isReaction": false,
+    "poolLevel": 9,
+    "set": "Empires",
+    "isActionSupplier": true
+  },
+  {
+    "name": "Patrician / Emporium",
     "cost": 2,
     "isAction": true,
     "isDrawer": true,
@@ -2127,24 +2141,10 @@ const allCards = [
     "isAttack": false,
     "isReaction": false,
     "poolLevel": 9,
-    "set": "Empires",
-    "isActionSupplier": true
-  },
-  {
-    "name": "Patrician",
-    "cost": 2,
-    "isAction": true,
-    "isDrawer": false,
-    "isDuration": false,
-    "isTreasure": false,
-    "isTrashing": false,
-    "isAttack": false,
-    "isReaction": false,
-    "poolLevel": 9,
     "set": "Empires"
   },
   {
-    "name": "Settlers",
+    "name": "Settlers / Bustling Village",
     "cost": 2,
     "isAction": true,
     "isDrawer": false,
@@ -2153,6 +2153,7 @@ const allCards = [
     "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
+    "isActionSupplier": true,
     "poolLevel": 9,
     "set": "Empires"
   },
@@ -2171,12 +2172,12 @@ const allCards = [
     "isVictory": true
   },
   {
-    "name": "Catapult",
+    "name": "Catapult / Rocks",
     "cost": 3,
     "isAction": true,
+    "isTreasure": false,
     "isDrawer": false,
     "isDuration": false,
-    "isTreasure": false,
     "isTrashing": true,
     "isAttack": true,
     "isReaction": false,
@@ -2224,15 +2225,16 @@ const allCards = [
     "isBuySupplier": true
   },
   {
-    "name": "Gladiator",
+    "name": "Gladiator / Fortune",
     "cost": 3,
     "isAction": true,
+    "isTreasure": false,
     "isDrawer": false,
     "isDuration": false,
-    "isTreasure": false,
     "isTrashing": false,
     "isAttack": false,
     "isReaction": false,
+    "isBuySupplier": true,
     "poolLevel": 10,
     "set": "Empires"
   },
@@ -3001,7 +3003,7 @@ const allCards = [
     "set": "Hinterlands"
   },
   {
-    "name": "Jack of all Trades",
+    "name": "Jack of All Trades",
     "cost": 4,
     "isAction": true,
     "isDrawer": true,
@@ -5054,7 +5056,7 @@ const allCards = [
     "set": "Promos"
   },
   {
-    "name": "Sauna",
+    "name": "Sauna / Avanto",
     "cost": 4,
     "isAction": true,
     "isDrawer": true,
@@ -7068,6 +7070,16 @@ const allLandscapes = [
   { "name": "Rich", "type": "Trait", "set": "Plunder", "poolLevel": 8 },
   { "name": "Shy", "type": "Trait", "set": "Plunder", "poolLevel": 8 },
   { "name": "Tireless", "type": "Trait", "set": "Plunder", "poolLevel": 8 },
+  { "name": "Amass", "type": "Event", "set": "Rising Sun", "poolLevel": 7 },
+  { "name": "Asceticism", "type": "Event", "set": "Rising Sun", "poolLevel": 7 },
+  { "name": "Continue", "type": "Event", "set": "Rising Sun", "poolLevel": 10 },
+  { "name": "Credit", "type": "Event", "set": "Rising Sun", "poolLevel": 7 },
+  { "name": "Foresight", "type": "Event", "set": "Rising Sun", "poolLevel": 7 },
+  { "name": "Gather", "type": "Event", "set": "Rising Sun", "poolLevel": 7 },
+  { "name": "Kintsugi", "type": "Event", "set": "Rising Sun", "poolLevel": 7 },
+  { "name": "Practice", "type": "Event", "set": "Rising Sun", "poolLevel": 7 },
+  { "name": "Receive Tribute", "type": "Event", "set": "Rising Sun", "poolLevel": 7 },
+  { "name": "Sea Trade", "type": "Event", "set": "Rising Sun", "poolLevel": 7 },
   { "name": "Summon", "type": "Event", "set": "Promos", "poolLevel": 7 }
 ];
 
