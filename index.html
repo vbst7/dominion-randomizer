@@ -215,6 +215,7 @@
         maxPoolLevel: 10,
         minPotion: 0,
         selectedMixes: {},
+        mixMode: 'Modern',
         minCardsBelowComplexity: 0,
         minComplexityLevel: 2,
     });
@@ -258,12 +259,13 @@
         minPotion: 0,
         assignedTraits: [],
         selectedMixes: {},
+        mixMode: 'Modern',
         minCardsBelowComplexity: 0,
         minComplexityLevel: 2,
     };
 
     // Destructure for easier access
-    const { selectedSets, selectedOptions, sortBy, maxPoolLevel, minPotion, selectedMixes } = userConfig;
+    const { selectedSets, selectedOptions, sortBy, maxPoolLevel, minPotion, selectedMixes, mixMode } = userConfig;
 
     // Load owned sets from localStorage on initial render
     useEffect(() => {
@@ -367,6 +369,11 @@
             allMixes.forEach(mix => {
                 if (selectedMixes[mix.name]) {
                     mix.cards.forEach(cardName => cardsFromMixes.add(cardName));
+                    // In Modern mode, also include the mix's modern (later-released) cards.
+                    // In Authentic mode these are excluded, leaving only the original cards.
+                    if (mixMode === 'Modern' && Array.isArray(mix.modernCards)) {
+                        mix.modernCards.forEach(cardName => cardsFromMixes.add(cardName));
+                    }
                 }
             });
         }
@@ -1720,6 +1727,32 @@
                     <button onClick={() => setShowSettings(false)}>
                     <X size={24} />
                     </button>
+                </div>
+
+                {/* Mix Mode */}
+                <div className="mb-6">
+                    <h3 className="font-bold text-lg">Mix Mode</h3>
+                    <p className="text-sm text-gray-600 mb-3">
+                        <span className="font-semibold">Authentic</span>: mixes contain only cards from expansions released
+                        before the tournament each mix was played at — no anachronisms.
+                        <span className="font-semibold"> Modern</span>: mixes also include cards released later that fit
+                        the spirit of the mix.
+                    </p>
+                    <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-1">
+                        {['Authentic', 'Modern'].map(mode => (
+                            <button
+                                key={mode}
+                                onClick={() => setUserConfig(prev => ({ ...prev, mixMode: mode }))}
+                                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                                    mixMode === mode
+                                        ? 'bg-teal-600 text-white shadow'
+                                        : 'text-gray-600 hover:bg-gray-200'
+                                }`}
+                            >
+                                {mode}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Owned Sets */}
